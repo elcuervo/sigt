@@ -2,6 +2,12 @@
 
 ![](https://images.unsplash.com/photo-1622966591413-81d31b41c8a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTV8fHNpZ25hdHVyZXxlbnwwfHwwfHx8MA%3D%3D)
 
+## Install
+
+```bash
+gem install sigt
+```
+
 ## Example
 
 ### Function composition
@@ -39,7 +45,7 @@ fn[1]
 #=> SigT::InputError: 1 violates constraints (type?(String, 1) failed)
 
 fn["elcuervo"]
-#=> {:name=>"raven"}
+#=> {:name=>"elcuervo"}
 ```
 
 ### Dry::Struct
