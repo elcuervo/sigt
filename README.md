@@ -29,7 +29,7 @@ with_date = SigT[AgeHash => FinalHash] do |hash|
   hash.update(created_at: Time.now.utc)
 end
 
-fn = TO_INTEGER >> hash >> with_date >> TO_JSON
+fn = hash >> with_date >> TO_JSON << TO_INTEGER
 fn["42"]
 #=> "{\"age\":42,\"name\":\"poe\",\"created_at\":\"2024-03-22 22:28:26 UTC\"}"
 ```
