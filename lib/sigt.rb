@@ -15,8 +15,6 @@ class SigT
   InputError = Class.new(Error)
   OutputError = Class.new(Error)
 
-  IDENTITY = -> (x) { x }
-
   class << self
     # Defines a signature for input and output types and wraps the provided block with type validation checks.
     #

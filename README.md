@@ -4,13 +4,33 @@
 
 ## Example
 
-### Dry::Types
+### Function composition
 
 ```ruby
 module Types
   include Dry.Types()
 end
 
+AgeHash = Types::Hash.schema(age: Types::Integer, name: Types::String)
+FinalHash = AgeHash & Types::Hash.schema(created_at: Types.Instance(Time))
+
+TO_INTEGER = -> (x) { x.to_i }
+TO_JSON = -> (x) { x.to_json }
+
+hash = SigT[Types::Integer => AgeHash] { |age| Hash[age: age, name: "poe"] }
+
+with_date = SigT[AgeHash => FinalHash] do |hash|
+  hash.update(created_at: Time.now.utc)
+end
+
+fn = TO_INTEGER >> hash >> with_date >> TO_JSON
+fn["42"]
+#=> "{\"age\":42,\"name\":\"poe\",\"created_at\":\"2024-03-22 22:28:26 UTC\"}"
+```
+
+### Dry::Types
+
+```ruby
 sig = SigT[Types::String => Types::Hash.schema(name: Types::String)]
 
 fn = sig[] { |input| Hash[name: input] }
