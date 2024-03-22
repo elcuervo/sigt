@@ -25,6 +25,13 @@ describe SigT do
 
       assert_raises(SigT::OutputError) { bad["1"] }
     end
+
+    it "multiline" do
+      sig = SigT[SigT::Types::String => SigT::Types::Hash.schema(name: SigT::Types::String)]
+      fn = sig[] { |input| Hash[name: input] }
+
+      assert_equal fn["raven"], { name: "raven" }
+    end
   end
 
   describe "complex definition" do
