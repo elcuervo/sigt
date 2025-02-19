@@ -9,6 +9,7 @@ class SigT
     include Dry.Types()
 
     Type = Types.Instance(Dry::Types::Type)
+
     Signature = Types::Hash
       .map(Type, Type)
       .constrained(max_size: 1)
@@ -35,14 +36,19 @@ class SigT
     # types.
     #
     def [](signature, &block)
-      Types::Signature[signature]
-        .flatten
-        .then do |input, output|
-          return sandwich(input, block, output) if block
-          -> (&fn) { sandwich(input, fn, output) }
-        end
-    rescue Dry::Types::ConstraintError => e
-      raise SignatureError, "Signature can only have 1 Dry::Type => Dry::Type compatible objects"
+      case signature
+      when Types::Type
+        (block >> wrap_or_raise(signature, OutputError)).call if block
+      when Types::Signature
+        signature
+          .flatten
+          .then do |input, output|
+            return sandwich(input, block, output) if block
+            -> (&fn) { sandwich(input, fn, output) }
+          end
+      else
+        raise SignatureError, "Signature can only have 1 Dry::Type => Dry::Type compatible objects"
+      end
     end
 
     private

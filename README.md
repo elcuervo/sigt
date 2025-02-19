@@ -10,13 +10,24 @@ gem install sigt
 
 ## Example
 
-### Function composition
+### Validate output
 
 ```ruby
 module Types
   include Dry.Types()
 end
 
+OutHash = Types::Hash.schema(id: Types::Integer, username: Types::String)
+
+SigT[OutHash] do
+  { cat: 1 }
+end
+# :id is missing in Hash input (SigT::OutputError)
+```
+
+### Function composition
+
+```ruby
 AgeHash = Types::Hash.schema(age: Types::Integer, name: Types::String)
 FinalHash = AgeHash & Types::Hash.schema(created_at: Types.Instance(Time))
 

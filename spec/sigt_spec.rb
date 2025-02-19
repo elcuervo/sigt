@@ -10,8 +10,18 @@ describe SigT do
       end
     end
 
+    let(:only_output) do
+      SigT[SigT::Types::Integer] do
+        1
+      end
+    end
+
     it "defines an input/output signature" do
       assert_equal fn["1"], 2
+    end
+
+    it "defines an output signature" do
+      assert_equal only_output, 1
     end
 
     it "checks the input" do
